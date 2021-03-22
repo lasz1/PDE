@@ -17,8 +17,8 @@ def sim_mc_Heston(s0, mu, v0, rho, kappa, theta, xi, T, dt):
     avg  = np.array([0, 0])
     cov = np.matrix([[1, rho], [rho, 1]])
     w   = np.random.multivariate_normal(avg, cov, T)
-    w_s = w[:,0]
-    w_v = w[:,1]
+    w_s = w[:,0]*np.sqrt(dt)
+    w_v = w[:,1]*np.sqrt(dt)
 
     vt = np.zeros(T)
     vt[0] = v0
@@ -26,9 +26,9 @@ def sim_mc_Heston(s0, mu, v0, rho, kappa, theta, xi, T, dt):
     st[0] = s0
     for t in range(1,T):
         vt[t] = np.abs(vt[t-1] + kappa*(theta-vt[t-1])*dt + \
-                                    xi*np.sqrt(vt[t-1])*w_v[t]*np.sqrt(dt))
+                                    xi*np.sqrt(vt[t-1])*w_v[t])
         st[t] = st[t-1]*np.exp((mu - 0.5*vt[t-1])*dt + \
-                                    np.sqrt(vt[t-1]*dt)*w_s[t]*np.sqrt(dt))
+                                    np.sqrt(vt[t-1])*w_s[t])
     return st, vt
 
 st, vt = sim_mc_Heston(s0, mu, v0, rho, kappa, theta, xi, T, dt)
