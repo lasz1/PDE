@@ -28,7 +28,7 @@ def sim_mc_Heston(s0, mu, v0, rho, kappa, theta, xi, T, dt):
         vt[t] = np.abs(vt[t-1] + kappa*(theta-vt[t-1])*dt + \
                                     xi*np.sqrt(vt[t-1])*w_v[t]*np.sqrt(dt))
         st[t] = st[t-1]*np.exp((mu - 0.5*vt[t-1])*dt + \
-                                    np.sqrt(vt[t-1]*dt)*w_s[t])
+                                    np.sqrt(vt[t-1]*dt)*w_s[t]*np.sqrt(dt))
     return st, vt
 
 st, vt = sim_mc_Heston(s0, mu, v0, rho, kappa, theta, xi, T, dt)
