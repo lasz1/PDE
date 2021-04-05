@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+print('coucou')
+
+
 T     = 252
 dt    = 1/252
 s0    = 100 # Initial price
