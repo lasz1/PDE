@@ -1,0 +1,36 @@
+    def implicit_euler(self):
+        sol = np.zeros((self.time_disc, self.space_disc)
+        
+        # defining the terminal condition
+        sol[-1] = self.term_cond(self.sgrid)
+
+        # defining the boundary condition above
+        sol[:, -1] = self.upper_bound(self.smax, self.tgrid)
+
+        # defining the linear equation system to solve :
+        A = - self.dt * (- self.r * self.sgrid/(2*self.ds) + np.square(self.sigma * self.sgrid)/(2*np.square(self.ds)))
+        B = 1 + self.r * self.dt + np.square(self.sigma * self.sgrid)/(np.square(self.ds)) * self.dt
+        C = - self.dt * (self.r * self.sgrid/(2*self.ds) + np.square(self.sigma * self.sgrid)/(2*np.square(self.ds)))
+        md = np.arange(self.space_disc)
+        sd = np.arange(self.space_disc - 1)
+
+        Matr = np.zeros((self.space_disc, self.space_disc))
+        Matr[md, md] = B
+        Matr[sd+1, sd] = A[1:]
+        Matr[sd, sd+1] = C[:-1]
+
+        # computing the implicit euler method
+        for t in range(self.time_disc-2, -1, -1):
+            sol_eq = sol[t+1].copy()
+            sol_eq[0] -= A[0] * sol[t, 0]
+            sol_eq[-1] -= C[-1] * sol[t, -1]
+            sol[t, 1:-1] = np.linalg.solve(Matr, sol_eq)[1:-1]
+        return sol
+
+    def option_price_implicit(self):
+        start_time = time.time()
+        prices = self.implicit_euler()[0]
+        plt.plot(self.sgrid, prices)
+        #####time_taken = Label(root, text="The program executed in %.3f seconds" % (time.time() - start_time))
+        #####time_taken.pack()
+        plt.show()
