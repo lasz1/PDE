@@ -70,17 +70,17 @@ if __name__ == '__main__':
     # Black and Scholes Parameters:
     T = 1         # Maturity in years
     x = 100       # Initial price
-    r = .01       # Drift / Risk free return
+    r = .03       # Drift / Risk free return
     σ = .2        # Volatility
 
     # Heston Parameters:
     T = 1         # Maturity in years
     s0 = 100      # Initial price
     r  = .01      # Drift / Risk free return
-    v0 = .1       # Initial Variance
+    v0 = .05      # Initial Variance
     κ  = .3       # Mean reversion factor of the variance
     θ  = .1       # Mean of the variance
-    γ  = .3       # Volatility of the variance
+    γ  = .15      # Volatility of the variance
     ρ  = -.2      # Leverage factor
 
     ########### Option Types ###########
@@ -88,24 +88,24 @@ if __name__ == '__main__':
     K = 110       # Stike price
 
     # For Call Parameters:
-    τ = 4 * 21   # Start date
-    pK = +.02     # Percentage above or lower than the price at τ
+    τ = 6 * 21   # Start date
+    pK = +.0     # Percentage above or lower than the price at τ
 
     mc = MonteCarloPricing(N)
 
     # European Call
-    print(' ------- European Call -------')
-    payoff_fct = mc.get_payoff_euro_call
+    #print(' ------- European Call -------')
+    #payoff_fct = mc.get_payoff_euro_call
 
     ## Black & Scholes
-    gen_fct = mc.gen_BS_prices
-    x = mc.price(gen_fct, payoff_fct, s0=s0, r=r, σ=σ, T=T, K=K)
-    print('\t Black & Scholes: ', x)
+    #gen_fct = mc.gen_BS_prices
+    #x = mc.price(gen_fct, payoff_fct, s0=s0, r=r, σ=σ, T=T, K=K)
+    #print('\t Black & Scholes: ', x)
 
     ## Heston
-    gen_fct = mc.gen_Hn_prices
-    x = mc.price(gen_fct, payoff_fct, s0=s0, r=r, v0=v0, κ=κ, θ=θ, γ=γ, ρ=ρ, T=T, K=K)
-    print('\t Heston: ', x)
+    #gen_fct = mc.gen_Hn_prices
+    #x = mc.price(gen_fct, payoff_fct, s0=s0, r=r, v0=v0, κ=κ, θ=θ, γ=γ, ρ=ρ, T=T, K=K)
+    #print('\t Heston: ', x)
 
 
     # Forward Call
@@ -118,6 +118,6 @@ if __name__ == '__main__':
     print('\t Black & Scholes: ', x)
 
     ## Heston
-    gen_fct = mc.gen_Hn_prices
-    x = mc.price(gen_fct, payoff_fct, s0=s0, r=r, v0=v0, κ=κ, θ=θ, γ=γ, ρ=ρ, T=T, τ=τ, pK=pK)
-    print('\t Heston: ', x)
+    #gen_fct = mc.gen_Hn_prices
+    #x = mc.price(gen_fct, payoff_fct, s0=s0, r=r, v0=v0, κ=κ, θ=θ, γ=γ, ρ=ρ, T=T, τ=τ, pK=pK)
+    #print('\t Heston: ', x)
