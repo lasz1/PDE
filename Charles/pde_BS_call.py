@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.sparse import diags
+import matplotlib.pyplot as plt
 
 class PDEPricing():
     def __init__(self, I, J, scheme):
@@ -68,13 +69,13 @@ class PDEPricing():
             v[i-1, 1:self.J-1] = M @ v[i,:]
 
         j = min([x for x in range(len(s)) if s[x]>=s0])
-        return v[0, j]*s0/s[j]
+        return v[0, j] * s0/s[j]
 
     def price_fwd_call(self, s0, pK, t1, T, r, σ):
         t_min = 0
         t_max = T
         s_min = 0
-        s_max = 2 * K
+        s_max = 2 * s0
         t = np.linspace(t_min, t_max, self.I)
         s = np.linspace(s_min, s_max, self.J)
         Δs = s[1] - s[0]
@@ -83,34 +84,41 @@ class PDEPricing():
 
         v = np.zeros((self.I, self.J))
 
-        self.set_fwd_call_boundaries(s, t, pK, i1)
         v[:i1,-1], v[:i1,0], v[i1,:] = self.set_fwd_call_boundaries(s,t,pK, i1)
         v = v[:i1+1, :]
 
-        M = self.get_trans_mtx(s=s, r=r, σ=σ, Δt=Δt, Δs=Δs)[:i1+1,:]
+        M = self.get_trans_mtx(s=s, r=r, σ=σ, Δt=Δt, Δs=Δs)
+
         for i in range(v.shape[0]-1, 0, -1):
-            v[i-1, 1:self.J-1] = M @ v[i,:]
+            v[i-1, 1:self.J-1] = (M @ v[i,:])
 
         j = min([x for x in range(len(s)) if s[x]>=s0])
-        print(j)
-        print(s)
-        print(v)
         return v[0, j]*s0/s[j]
 
 if __name__=='__main__':
     scheme = 'implicit'
-    I = 8
-    J = 5
+    I = 60
+    J = 60
     r = .03
     σ = .2
-    K = 110
+    K = 100
     T = 1
     s0 = 100
-    pK = -.05
+    pK = .0
     t1 = .5
     pde = PDEPricing(I, J, scheme)
+
     p = pde.price_call(s0, K, T, r, σ, t=0)
     print('Vanilla Call: ', p)
 
-    p = pde.price_fwd_call(s0, pK, t1, T, r, σ)
-    print('Forward Call: ', p)
+    #p = pde.price_fwd_call(s0, pK, t1, T, r, σ)
+    #print('Forward Call: ', p)
+
+
+    p = []
+    for t1 in range(0, 100, 10):
+        t1 /= 100
+        p.append(pde.price_fwd_call(s0, pK, t1, T, r, σ))
+    print(p)
+    plt.plot(p)
+    plt.show()
