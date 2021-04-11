@@ -18,7 +18,7 @@ class PDEHnPricing():
                 c = Δt / Δv**2 * v[j] * σ**2 / 2
                 d = Δt / Δs * (r * s[i] + s[i]**2 * v[j] / 2 / Δs)
                 e = Δt / Δv * (α + σ**2 * v[j] / 2 / Δv)
-                f = 1 - 2 * (a + c) - Δt * (r * (1 + s[i] / Δs) + α / Δv)
+                f = 1 - 2 * (b + c) - Δt * (r * (1 + s[i] / Δs) + α / Δv)
                 M[i, j] = np.array([[a, b, a], [c, f, e], [a, d, a]])
         return M
 
@@ -64,9 +64,9 @@ class PDEHnPricing():
 
 if __name__ == '__main__':
     scheme = 'explicit'
-    N  = 10
-    I  = 10
-    J  = 10
+    N  = 20
+    I  = 20
+    J  = 20
     s0 = 100
     K  = 110
     T  = 1
