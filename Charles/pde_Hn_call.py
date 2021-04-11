@@ -13,11 +13,11 @@ class PDEHnPricing():
         for i in range(self.I):
             for j in range(self.J):
                 α = κ * (θ - v[j]) - λ * σ * np.sqrt(v[j])
-                a = Δt / Δs / Δv * ρ * s[i]* v[j] / 4
+                a = Δt / Δs / Δv * ρ * σ * s[i]* v[j] / 4
                 b = Δt / Δs**2 * v[j] * s[i]**2 / 2
                 c = Δt / Δv**2 * v[j] * σ**2 / 2
-                d = Δt / Δs * s[i] * (r + s[i] * v[j] /2)
-                e = Δt / Δv * (σ**2 * v[j] / 2 / Δv + α)
+                d = Δt / Δs * (r * s[i] + s[i]**2 * v[j] / 2 / Δs)
+                e = Δt / Δv * (α + σ**2 * v[j] / 2 / Δv)
                 f = 1 - 2 * (a + c) - Δt * (r * (1 + s[i] / Δs) + α / Δv)
                 M[i, j] = np.array([[a, b, a], [c, f, e], [a, d, a]])
         return M
@@ -59,7 +59,7 @@ class PDEHnPricing():
                 u_N = u_n
         i = min([x for x in range(len(s)) if s[x]>=s0])
         j = min([x for x in range(len(s)) if v[x]>=v0])
-        return u_N[i, j] * s0/s[j]
+        return u_N[i, j] * s0/s[i]
 
 
 if __name__ == '__main__':
