@@ -2,7 +2,7 @@ import numpy as np
 from scipy.sparse import diags
 import matplotlib.pyplot as plt
 
-class PDEPricing():
+class PDEBSPricing():
     def __init__(self, I, J, scheme):
         self.I = I
         self.J = J
@@ -106,7 +106,7 @@ if __name__=='__main__':
     s0 = 100
     pK = .0
     t1 = .5
-    pde = PDEPricing(I, J, scheme)
+    pde = PDEBSPricing(I, J, scheme)
 
     p = pde.price_call(s0, K, T, r, σ, t=0)
     print('Vanilla Call: ', p)
